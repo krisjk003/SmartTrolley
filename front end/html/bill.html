@@ -103,7 +103,7 @@
 </div>
 
 <script>
-    fetch("http://192.168.1.6:5000/cart")
+   fetch("https://smarttrolley.onrender.com/cart")
         .then(res => res.json())
         .then(cart => {
 
@@ -129,7 +129,7 @@
             document.getElementById("bill-total").innerText = total.toFixed(2);
 
             // 🔥 CLEAR BACKEND AFTER BILL IS GENERATED
-            return fetch("http://192.168.1.6:5000/clear", {
+            return fetch("https://smarttrolley.onrender.com/clear", {
                 method: "POST"
             });
 
