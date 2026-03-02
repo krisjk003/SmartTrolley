@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartTrolley | Cart Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Barcode Library -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="../js/script.js"></script>
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo-area">
+        <img src="../assets/logo.png" alt="SmartTrolley Logo">
+        <span>SmartTrolley</span>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="#" class="nav-btn active">Dashboard</a>
+    </nav>
+</header>
+
+<main class="dashboard">
+
+    <!-- LEFT SIDE -->
+    <section class="cart-section">
+        <h2>🛒 Cart Items</h2>
+
+        <!-- Barcode Scanner -->
+        <div id="reader" style="width:300px; margin-bottom:20px;"></div>
+
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Price (₹)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="cart-body">
+                <tr class="empty-state">
+                    <td colspan="4">Waiting for barcode scan...</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- RIGHT SIDE -->
+    <aside class="summary-section">
+
+        <h2>📊 Cart Summary</h2>
+
+        <div class="summary-card">
+            <p>Total Items</p>
+            <h3 id="total-items">0</h3>
+        </div>
+
+        <div class="summary-card highlight">
+            <p>Total Bill</p>
+            <h3>₹ <span id="total-price">0</span></h3>
+        </div>
+
+        <div class="summary-card">
+            <p>System Status</p>
+            <span class="status online">Online</span>
+        </div>
+
+        <button class="checkout-btn" id="generate-bill-btn">
+            Generate Bill
+        </button>
+
+    </aside>
+
+</main>
+
+<footer class="footer">
+    <p>Live data powered by SmartTrolley</p>
+</footer>
+
+<script>
+let cart = {};
+let totalItems = 0;
+let totalPrice = 0;
+
+function updateSummary() {
+    document.getElementById("total-items").innerText = totalItems;
+    document.getElementById("total-price").innerText = totalPrice;
+}
+
+function addProductToCart(product) {
+
+    const cartBody = document.getElementById("cart-body");
+
+    // Remove empty state
+    const emptyState = document.querySelector(".empty-state");
+    if (emptyState) emptyState.remove();
+
+    if (cart[product.name]) {
+        cart[product.name].qty += 1;
+        cart[product.name].row.querySelector(".qty").innerText = cart[product.name].qty;
+    } else {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${product.name}</td>
+            <td class="qty">1</td>
+            <td>${product.price}</td>
+            <td><span class="status online">Added</span></td>
+        `;
+
+        cartBody.appendChild(row);
+
+        cart[product.name] = {
+            qty: 1,
+            price: product.price,
+            row: row
+        };
+    }
+
+    totalItems++;
+    totalPrice += product.price;
+
+    updateSummary();
+}
+
+function onScanSuccess(decodedText) {
+
+    console.log("Scanned barcode:", decodedText);
+
+    fetch("/scan-barcode", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ barcode: decodedText })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.price > 0) {
+            addProductToCart(data);
+        } else {
+            alert("Unknown product");
+        }
+    });
+}
+
+const scanner = new Html5QrcodeScanner(
+    "reader",
+    { fps: 10, qrbox: 250 }
+);
+
+scanner.render(onScanSuccess);
+</script>
+
+</body>
+</html>
