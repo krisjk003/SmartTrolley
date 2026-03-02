@@ -17,6 +17,7 @@ const products = {
 };
 
 let liveCart = [];
+let lastBill = [];
 
 // 🔥 Scan barcode route
 app.post("/scan", (req, res) => {
@@ -53,6 +54,18 @@ app.get("/cart", (req, res) => {
 app.post("/clear", (req, res) => {
     liveCart = [];
     res.json({ success: true });
+});
+
+// 🔥 Generate Bill (copy cart then clear it)
+app.post("/generate-bill", (req, res) => {
+    lastBill = [...liveCart];   // Copy current cart
+    liveCart = [];              // Clear cart
+    res.json({ success: true });
+});
+
+// 🔥 Get last generated bill
+app.get("/bill-data", (req, res) => {
+    res.json(lastBill);
 });
 
 const PORT = process.env.PORT || 5000;
