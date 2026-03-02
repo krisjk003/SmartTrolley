@@ -12,7 +12,7 @@
 
     /* ---------- CONFIG ---------- */
 
-    const BASE_URL = "http://192.168.1.6:5000"; // 🔥 CHANGE if IP changes
+    const BASE_URL = "https://smarttrolley.onrender.com"; // 🔥 CHANGE if IP changes
 
     /* ---------- STATE ---------- */
 
