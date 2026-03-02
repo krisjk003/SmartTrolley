@@ -13,7 +13,9 @@
 
     <!-- Barcode Library -->
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <script src="../js/script.js"></script>
+
+    <!-- Main Frontend Script -->
+    <script src="../js/script.js" defer></script>
 </head>
 <body>
 
@@ -85,81 +87,6 @@
 <footer class="footer">
     <p>Live data powered by SmartTrolley</p>
 </footer>
-
-<script>
-let cart = {};
-let totalItems = 0;
-let totalPrice = 0;
-
-function updateSummary() {
-    document.getElementById("total-items").innerText = totalItems;
-    document.getElementById("total-price").innerText = totalPrice;
-}
-
-function addProductToCart(product) {
-
-    const cartBody = document.getElementById("cart-body");
-
-    // Remove empty state
-    const emptyState = document.querySelector(".empty-state");
-    if (emptyState) emptyState.remove();
-
-    if (cart[product.name]) {
-        cart[product.name].qty += 1;
-        cart[product.name].row.querySelector(".qty").innerText = cart[product.name].qty;
-    } else {
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-            <td>${product.name}</td>
-            <td class="qty">1</td>
-            <td>${product.price}</td>
-            <td><span class="status online">Added</span></td>
-        `;
-
-        cartBody.appendChild(row);
-
-        cart[product.name] = {
-            qty: 1,
-            price: product.price,
-            row: row
-        };
-    }
-
-    totalItems++;
-    totalPrice += product.price;
-
-    updateSummary();
-}
-
-function onScanSuccess(decodedText) {
-
-    console.log("Scanned barcode:", decodedText);
-
-    fetch("/scan-barcode", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ barcode: decodedText })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.price > 0) {
-            addProductToCart(data);
-        } else {
-            alert("Unknown product");
-        }
-    });
-}
-
-const scanner = new Html5QrcodeScanner(
-    "reader",
-    { fps: 10, qrbox: 250 }
-);
-
-scanner.render(onScanSuccess);
-</script>
 
 </body>
 </html>
