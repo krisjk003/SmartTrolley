@@ -47,6 +47,9 @@
 
         totalItemsEl.textContent = totalItems;
         totalPriceEl.textContent = totalPrice.toFixed(2);
+        // 🔥 Sync with index.html
+       localStorage.setItem("cartItems", totalItems);
+       localStorage.setItem("cartTotal", totalPrice.toFixed(2));
     };
 
     const updateCartTable = () => {
