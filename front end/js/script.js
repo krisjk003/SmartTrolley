@@ -153,7 +153,7 @@
             "reader",
             {
                 fps: 10,
-                qrbox: { width: 250, height: 250 },
+                qrbox: { width: 50, height: 50 },
                 rememberLastUsedCamera: true,
                 supportedScanTypes: [
                     Html5QrcodeScanType.SCAN_TYPE_CAMERA,
