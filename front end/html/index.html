@@ -90,6 +90,24 @@
 
     <!-- JS -->
     <script src="../js/script.js"></script>
+     <script>
+function loadCartStatus() {
+    const items = localStorage.getItem("cartItems") || 0;
+    const total = localStorage.getItem("cartTotal") || 0;
+
+    document.getElementById("cart-count").textContent = items;
+    document.getElementById("cart-total").textContent = total;
+}
+
+loadCartStatus();
+
+// 🔥 Live update if dashboard open in another tab
+window.addEventListener("storage", loadCartStatus);
+</script>
+
+
+
+
 
 </body>
 </html>
