@@ -522,10 +522,29 @@ html {
 @media (max-width: 768px) {
 
     .hero {
-    display: grid;
-    grid-template-columns: 1fr;
-    padding: 60px 20px;
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+    padding: 60px 20px !important;
     text-align: center;
+}
+.hero-text h1 {
+    font-size: 32px !important;
+}
+
+.hero-text p {
+    font-size: 14px !important;
+}
+
+.hero-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.glow-card {
+    max-width: 240px;
+    margin: 0 auto;
+}
 }
 
     .hero-content {
