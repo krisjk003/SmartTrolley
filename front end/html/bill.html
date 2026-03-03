@@ -103,7 +103,7 @@
 </div>
 
 <script>
-   fetch("https://smarttrolley.onrender.com/cart")
+   fetch("https://smarttrolley-backend.onrender.com/cart")
         .then(res => res.json())
         .then(cart => {
 
@@ -129,7 +129,7 @@
             document.getElementById("bill-total").innerText = total.toFixed(2);
 
             // 🔥 CLEAR BACKEND AFTER BILL IS GENERATED
-            return fetch("https://smarttrolley.onrender.com/clear", {
+            return fetch("https://smarttrolley-backend.onrender.com/clear", {
                 method: "POST"
             });
 
