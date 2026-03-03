@@ -12,7 +12,7 @@
 
     /* ---------- CONFIG ---------- */
 
-    const BASE_URL = "https://smarttrolley.onrender.com"; // 🔥 CHANGE if IP changes
+    const BASE_URL = "https://smarttrolley-backend.onrender.com"; // 🔥 CHANGE if IP changes
 
     /* ---------- STATE ---------- */
 
