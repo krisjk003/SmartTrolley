@@ -495,7 +495,7 @@ html {
 }
 #reader {
     width: 100%;
-    max-width: 500px;
+    max-width: 300px;
     margin: 20px auto;
 }
 
@@ -621,6 +621,16 @@ html {
 .cart-section,
 .summary-section {
     width: 100%;
+}
+/* FORCE LARGE SCANNER */
+
+#reader {
+    width: 100% !important;
+    max-width: 700px !important;
+}
+
+#reader__scan_region {
+    width: 100% !important;
 }
 
 
