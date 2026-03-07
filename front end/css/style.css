@@ -493,11 +493,7 @@ html {
     margin-top: 25px;
 
 }
-#reader {
-    width: 100%;
-    max-width: 300px;
-    margin: 20px auto;
-}
+
 
 #reader__scan_region {
     width: 100%;
@@ -622,18 +618,16 @@ html {
 .summary-section {
     width: 100%;
 }
-/* FORCE LARGE SCANNER */
-
 #reader {
-    width: 100% !important;
-    max-width: 700px !important;
+    width: 100%;
+    max-width: 90vw;
+    margin: 20px auto;
 }
 
-#reader__scan_region {
-    width: 100% !important;
+#reader video {
+    width: 100%;
+    height: auto;
 }
-
-
     
 
 
