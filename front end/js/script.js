@@ -156,7 +156,8 @@
     "reader",
     {
         fps: 10,
-        qrbox: { width: 250, height: 100 }, // better for barcodes
+        qrbox: { width: 350, height: 150 }, // better for barcodes
+        aspectRatio: 1.0,
         facingMode: "environment", // 🔥 FORCE BACK CAMERA
         rememberLastUsedCamera: false,
         supportedScanTypes: [
