@@ -153,21 +153,18 @@
         }
 
         const scanner = new Html5QrcodeScanner(
-            "reader",
-            {
-                fps: 10,
-                qrbox: { width: 50, height: 50 },
-                rememberLastUsedCamera: true,
-                supportedScanTypes: [
-                    Html5QrcodeScanType.SCAN_TYPE_CAMERA,
-                    Html5QrcodeScanType.SCAN_TYPE_FILE
-                ]
-            },
-            false
-        );
-
-        scanner.render(onScanSuccess);
-    };
+    "reader",
+    {
+        fps: 10,
+        qrbox: { width: 250, height: 100 }, // better for barcodes
+        facingMode: "environment", // 🔥 FORCE BACK CAMERA
+        rememberLastUsedCamera: false,
+        supportedScanTypes: [
+            Html5QrcodeScanType.SCAN_TYPE_CAMERA
+        ]
+    },
+    false
+);
 
     /* ---------- BILL GENERATION ---------- */
 
