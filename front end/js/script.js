@@ -156,7 +156,11 @@
     "reader",
     {
         fps: 10,
-        qrbox: { width: 350, height: 150 }, // better for barcodes
+        qrbox: function(viewfinderWidth, viewfinderHeight) {
+    let minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+    let qrboxSize = Math.floor(minEdge * 0.75);
+    return { width: qrboxSize, height: qrboxSize };
+}, // better for barcodes
         aspectRatio: 1.0,
         facingMode: "environment", // 🔥 FORCE BACK CAMERA
         rememberLastUsedCamera: false,
