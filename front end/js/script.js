@@ -130,68 +130,88 @@
 
     /* ---------- BARCODE SCANNER ---------- */
 
-    const initScanner = () => {
+  const initScanner = () => {
 
-        if (!window.Html5QrcodeScanner) return;
+    if (!window.Html5QrcodeScanner) return;
 
-       
-      
+    function playBeep() {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
 
-      let scanLock = false;
-let lastScanned = null;
-let lastScanTime = 0;
+        oscillator.type = "sine";
+        oscillator.frequency.value = 800; // beep tone
 
-function onScanSuccess(decodedText) {
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
 
-    const now = Date.now();
+        oscillator.start();
 
-    // Ignore same barcode for 4 seconds
-    if (decodedText === lastScanned && (now - lastScanTime) < 2900) {
-        return;
+        setTimeout(() => {
+            oscillator.stop();
+            audioCtx.close();
+        }, 120); // beep duration
     }
 
-    if (scanLock) return;
-    scanLock = true;
+    let scanLock = false;
+    let lastScanned = null;
+    let lastScanTime = 0;
 
-    lastScanned = decodedText;
-    lastScanTime = now;
+    function onScanSuccess(decodedText) {
 
-    log("Scanned barcode:", decodedText);
+        const now = Date.now();
 
-    fetch(`${BASE_URL}/scan`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ barcode: decodedText })
-    })
-    .then(res => res.json())
-    .then(() => {
-        fetchCartFromBackend(); // refresh cart
-    })
-    .catch(err => log("Scan error:", err));
-
-    // unlock scanner after 2 seconds
-    setTimeout(() => {
-        scanLock = false;
-    }, 2000);
-}
-
-       const scanner = new Html5Qrcode("reader");
-
-scanner.start(
-    { facingMode: "environment" }, // BACK CAMERA
-    {
-        fps: 10,
-        qrbox: function(viewfinderWidth, viewfinderHeight) {
-            let minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-            let qrboxSize = Math.floor(minEdge * 0.75);
-            return { width: qrboxSize, height: qrboxSize };
+        // Ignore same barcode for ~3 seconds
+        if (decodedText === lastScanned && (now - lastScanTime) < 2900) {
+            return;
         }
-    },
-    onScanSuccess
-);
-    };
+
+        if (scanLock) return;
+        scanLock = true;
+
+        lastScanned = decodedText;
+        lastScanTime = now;
+
+        log("Scanned barcode:", decodedText);
+
+        fetch(`${BASE_URL}/scan`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ barcode: decodedText })
+        })
+        .then(res => res.json())
+        .then(() => {
+
+            playBeep();              // 🔊 BEEP ADDED HERE
+
+            fetchCartFromBackend();  // refresh cart
+        })
+        .catch(err => log("Scan error:", err));
+
+        // unlock scanner after 2 seconds
+        setTimeout(() => {
+            scanLock = false;
+        }, 2000);
+    }
+
+    const scanner = new Html5Qrcode("reader");
+
+    scanner.start(
+        { facingMode: "environment" }, // BACK CAMERA
+        {
+            fps: 10,
+            qrbox: function(viewfinderWidth, viewfinderHeight) {
+                let minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+                let qrboxSize = Math.floor(minEdge * 0.75);
+                return { width: qrboxSize, height: qrboxSize };
+            }
+        },
+        onScanSuccess
+    ).catch(err => console.error("Scanner start failed:", err));
+
+};
     /* ---------- BILL GENERATION ---------- */
 
     const setupGenerateBill = () => {
