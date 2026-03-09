@@ -170,6 +170,7 @@
     },
     false
 );
+scanner.render(onScanSuccess);
 
     /* ---------- BILL GENERATION ---------- */
 
