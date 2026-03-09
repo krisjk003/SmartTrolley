@@ -162,25 +162,20 @@
     }, 2000);
 }
 
-       const scanner = new Html5QrcodeScanner(
-    "reader",
+       const scanner = new Html5Qrcode("reader");
+
+scanner.start(
+    { facingMode: "environment" }, // BACK CAMERA
     {
         fps: 10,
         qrbox: function(viewfinderWidth, viewfinderHeight) {
             let minEdge = Math.min(viewfinderWidth, viewfinderHeight);
             let qrboxSize = Math.floor(minEdge * 0.75);
             return { width: qrboxSize, height: qrboxSize };
-        },
-        aspectRatio: 1.0,
-       defaultCamera: "environment",
-        rememberLastUsedCamera: false
+        }
     },
-    false
+    onScanSuccess
 );
-
-scanner.render(onScanSuccess);
-    };
-
     /* ---------- BILL GENERATION ---------- */
 
     const setupGenerateBill = () => {
