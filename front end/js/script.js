@@ -176,6 +176,7 @@ scanner.start(
     },
     onScanSuccess
 );
+    };
     /* ---------- BILL GENERATION ---------- */
 
     const setupGenerateBill = () => {
