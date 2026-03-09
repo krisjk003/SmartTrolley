@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>SmartTrolley | Bill</title>
     <link rel="stylesheet" href="../css/style.css">
+
+    <!-- QR Generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,6 +62,16 @@
             margin-top: 40px;
             font-size: 16px;
         }
+
+        .fun-payment {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        #qrcode {
+            margin-top: 15px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -84,17 +98,14 @@
 
     <div class="total">
         Total Amount: ₹ <span id="bill-total">0</span>
-        
-    
-</div>
+    </div>
 
-<div class="fun-payment">
-    <h3> Pay Directly to Developer</h3>
-    <p>Scan this QR if you enjoyed SmartTrolley 😌</p>
-    <img src="../assets/ambadi gpay.jpeg" alt="GPay QR" class="qr-image">
+    <div class="fun-payment">
+        <h3>Pay via UPI</h3>
+        <p>Scan this QR to complete the payment</p>
 
-
-
+        <!-- Dynamic QR -->
+        <div id="qrcode"></div>
     </div>
 
     <div class="thank-you">
@@ -103,43 +114,57 @@
 </div>
 
 <script>
-   fetch("https://smarttrolley-backend.onrender.com/cart")
-        .then(res => res.json())
-        .then(cart => {
+fetch("https://smarttrolley-backend.onrender.com/cart")
+.then(res => res.json())
+.then(cart => {
 
-            const tbody = document.querySelector("#bill-table tbody");
-            let total = 0;
+    const tbody = document.querySelector("#bill-table tbody");
+    let total = 0;
 
-            cart.forEach(item => {
+    cart.forEach(item => {
 
-                const gstAmount = (item.price * item.gst) / 100;
-                const finalPrice = (item.price + gstAmount) * item.qty;
+        const gstAmount = (item.price * item.gst) / 100;
+        const finalPrice = (item.price + gstAmount) * item.qty;
 
-                total += finalPrice;
+        total += finalPrice;
 
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${item.name}</td>
-                    <td>${item.qty}</td>
-                    <td>${finalPrice.toFixed(2)}</td>
-                `;
-                tbody.appendChild(row);
-            });
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.qty}</td>
+            <td>${finalPrice.toFixed(2)}</td>
+        `;
+        tbody.appendChild(row);
+    });
 
-            document.getElementById("bill-total").innerText = total.toFixed(2);
+    document.getElementById("bill-total").innerText = total.toFixed(2);
 
-            // 🔥 CLEAR BACKEND AFTER BILL IS GENERATED
-            return fetch("https://smarttrolley-backend.onrender.com/clear", {
-                method: "POST"
-            });
+    /* --------- DYNAMIC UPI QR --------- */
 
-        })
-        .then(() => {
-            console.log("Cart cleared after billing");
-        })
-        .catch(err => console.error("Error:", err));
+    const upiID = "ambadikrishna1808@oksbi";
+    const name = "Ambadi Krishna";
+
+    const upiURL =
+    `upi://pay?pa=${upiID}&pn=${name}&am=${total.toFixed(2)}&cu=INR`;
+
+    new QRCode(document.getElementById("qrcode"), {
+        text: upiURL,
+        width: 220,
+        height: 220
+    });
+
+    /* --------- CLEAR BACKEND --------- */
+
+    return fetch("https://smarttrolley-backend.onrender.com/clear", {
+        method: "POST"
+    });
+
+})
+.then(() => {
+    console.log("Cart cleared after billing");
+})
+.catch(err => console.error("Error:", err));
 </script>
-
 
 </body>
 </html>
