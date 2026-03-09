@@ -1,169 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>SmartTrolley | Bill</title>
-    <link rel="stylesheet" href="../css/style.css">
+<meta charset="UTF-8">
+<title>SmartTrolley | Bill</title>
+<link rel="stylesheet" href="../css/style.css">
 
-    <!-- QR Generator -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- QR Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #ffffff;
-            color: #000;
-            padding: 40px;
-        }
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#ffffff;
+color:#000;
+padding:40px;
+}
 
-        .bill-container {
-            max-width: 700px;
-            margin: auto;
-            border: 1px solid #ccc;
-            padding: 30px;
-        }
+.bill-container{
+max-width:700px;
+margin:auto;
+border:1px solid #ccc;
+padding:30px;
+}
 
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
+h1{
+text-align:center;
+margin-bottom:10px;
+}
 
-        .meta {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 14px;
-            color: #555;
-        }
+.meta{
+text-align:center;
+margin-bottom:30px;
+font-size:14px;
+color:#555;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
+table{
+width:100%;
+border-collapse:collapse;
+margin-bottom:30px;
+}
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
-        }
+th,td{
+border:1px solid #ddd;
+padding:12px;
+text-align:center;
+}
 
-        th {
-            background: #f4f4f4;
-        }
+th{
+background:#f4f4f4;
+}
 
-        .total {
-            text-align: right;
-            font-size: 18px;
-            font-weight: bold;
-        }
+.total{
+text-align:right;
+font-size:18px;
+font-weight:bold;
+}
 
-        .thank-you {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 16px;
-        }
+.thank-you{
+text-align:center;
+margin-top:40px;
+font-size:16px;
+}
 
-        .fun-payment {
-            text-align: center;
-            margin-top: 30px;
-        }
+.fun-payment{
+text-align:center;
+margin-top:30px;
+}
 
-        #qrcode {
-            margin-top: 15px;
-            display: inline-block;
-        }
-    </style>
+#qrcode{
+margin-top:15px;
+display:inline-block;
+}
+</style>
 </head>
+
 <body>
 
 <div class="bill-container">
-    <h1>SmartTrolley</h1>
-    <div class="meta">
-        Smart Retail Invoice<br>
-        Generated Online
-    </div>
 
-    <table id="bill-table">
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Qty</th>
-                <th>Price (₹)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Items inserted here -->
-        </tbody>
-    </table>
+<h1>SmartTrolley</h1>
 
-    <div class="total">
-        Total Amount: ₹ <span id="bill-total">0</span>
-    </div>
-
-    <div class="fun-payment">
-        <h3>Pay via UPI</h3>
-        <p>Scan this QR to complete the payment</p>
-
-        <!-- Dynamic QR -->
-        <div id="qrcode"></div>
-    </div>
-
-    <div class="thank-you">
-        Thank you for shopping with SmartTrolley 🙏
-    </div>
+<div class="meta">
+Smart Retail Invoice<br>
+Generated Online
 </div>
 
+<table id="bill-table">
+<thead>
+<tr>
+<th>Item</th>
+<th>Qty</th>
+<th>Price (₹)</th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+
+</table>
+
+<div class="total">
+Total Amount: ₹ <span id="bill-total">0</span>
+</div>
+
+<div class="fun-payment">
+<h3>Pay via UPI</h3>
+<p>Scan this QR to complete the payment</p>
+
+<div id="qrcode"></div>
+
+</div>
+
+<div class="thank-you">
+Thank you for shopping with SmartTrolley 🙏
+</div>
+
+</div>
+
+
 <script>
+
 fetch("https://smarttrolley-backend.onrender.com/cart")
-.then(res => res.json())
-.then(cart => {
+.then(res=>res.json())
+.then(cart=>{
 
-    const tbody = document.querySelector("#bill-table tbody");
-    let total = 0;
+const tbody=document.querySelector("#bill-table tbody");
 
-    cart.forEach(item => {
+let total=0;
 
-        const gstAmount = (item.price * item.gst) / 100;
-        const finalPrice = (item.price + gstAmount) * item.qty;
+cart.forEach(item=>{
 
-        total += finalPrice;
+const gstAmount=(item.price*item.gst)/100;
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${item.name}</td>
-            <td>${item.qty}</td>
-            <td>${finalPrice.toFixed(2)}</td>
-        `;
-        tbody.appendChild(row);
-    });
+const finalPrice=(item.price+gstAmount)*item.qty;
 
-    document.getElementById("bill-total").innerText = total.toFixed(2);
+total+=finalPrice;
 
-    /* --------- DYNAMIC UPI QR --------- */
+const row=document.createElement("tr");
 
-    const upiID = "ambadikrishna1808@oksbi";
-    const name = "Ambadi Krishna";
+row.innerHTML=`
+<td>${item.name}</td>
+<td>${item.qty}</td>
+<td>${finalPrice.toFixed(2)}</td>
+`;
 
-    const upiURL =
-    `upi://pay?pa=${upiID}&pn=${name}&am=${total.toFixed(2)}&cu=INR`;
+tbody.appendChild(row);
 
-    new QRCode(document.getElementById("qrcode"), {
-        text: upiURL,
-        width: 220,
-        height: 220
-    });
+});
 
-    /* --------- CLEAR BACKEND --------- */
+document.getElementById("bill-total").innerText=total.toFixed(2);
 
-    return fetch("https://smarttrolley-backend.onrender.com/clear", {
-        method: "POST"
-    });
+
+
+/* ----------- UPI QR GENERATION ----------- */
+
+const upiID="ambadikrishna1808@oksbi";
+
+const name="Ambadi Krishna";
+
+const amount=total.toFixed(2);
+
+const upiURL=`upi://pay?pa=${upiID}&pn=${name}&am=${amount}&cu=INR`;
+
+new QRCode(document.getElementById("qrcode"),{
+
+text:upiURL,
+
+width:220,
+
+height:220
+
+});
+
+
+
+/* -------- CLEAR CART AFTER BILL -------- */
+
+return fetch("https://smarttrolley-backend.onrender.com/clear",{
+
+method:"POST"
+
+});
 
 })
-.then(() => {
-    console.log("Cart cleared after billing");
+
+.then(()=>{
+
+console.log("Cart cleared after billing");
+
 })
-.catch(err => console.error("Error:", err));
+
+.catch(err=>console.error("Error:",err));
+
 </script>
 
 </body>
