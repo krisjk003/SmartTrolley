@@ -138,9 +138,10 @@
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
+       gainNode.gain.value = 2.0;
 
         oscillator.type = "sine";
-        oscillator.frequency.value = 800; // beep tone
+        oscillator.frequency.value = 1200; // beep tone
 
         oscillator.connect(gainNode);
         gainNode.connect(audioCtx.destination);
