@@ -135,11 +135,26 @@
         if (!window.Html5QrcodeScanner) return;
 
        
-         let scanLock = false;
-        function onScanSuccess(decodedText) {
+      
 
-    if (scanLock) return;   // prevent multiple scans
+      let scanLock = false;
+let lastScanned = null;
+let lastScanTime = 0;
+
+function onScanSuccess(decodedText) {
+
+    const now = Date.now();
+
+    // Ignore same barcode for 4 seconds
+    if (decodedText === lastScanned && (now - lastScanTime) < 2900) {
+        return;
+    }
+
+    if (scanLock) return;
     scanLock = true;
+
+    lastScanned = decodedText;
+    lastScanTime = now;
 
     log("Scanned barcode:", decodedText);
 
@@ -152,11 +167,11 @@
     })
     .then(res => res.json())
     .then(() => {
-        fetchCartFromBackend(); // 🔥 Refresh cart immediately
+        fetchCartFromBackend(); // refresh cart
     })
     .catch(err => log("Scan error:", err));
 
-    // allow scanning again after 2 seconds
+    // unlock scanner after 2 seconds
     setTimeout(() => {
         scanLock = false;
     }, 2000);
