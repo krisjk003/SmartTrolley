@@ -134,23 +134,33 @@
 
         if (!window.Html5QrcodeScanner) return;
 
+       
+         let scanLock = false;
         function onScanSuccess(decodedText) {
 
-            log("Scanned barcode:", decodedText);
+    if (scanLock) return;   // prevent multiple scans
+    scanLock = true;
 
-            fetch(`${BASE_URL}/scan`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ barcode: decodedText })
-            })
-            .then(res => res.json())
-            .then(() => {
-                fetchCartFromBackend(); // 🔥 Refresh cart immediately
-            })
-            .catch(err => log("Scan error:", err));
-        }
+    log("Scanned barcode:", decodedText);
+
+    fetch(`${BASE_URL}/scan`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ barcode: decodedText })
+    })
+    .then(res => res.json())
+    .then(() => {
+        fetchCartFromBackend(); // 🔥 Refresh cart immediately
+    })
+    .catch(err => log("Scan error:", err));
+
+    // allow scanning again after 2 seconds
+    setTimeout(() => {
+        scanLock = false;
+    }, 2000);
+}
 
        const scanner = new Html5QrcodeScanner(
     "reader",
