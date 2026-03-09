@@ -169,7 +169,7 @@
 );
 
 scanner.render(onScanSuccess);
-    }
+    };
 
     /* ---------- BILL GENERATION ---------- */
 
