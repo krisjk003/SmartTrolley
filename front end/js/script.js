@@ -172,7 +172,7 @@
             return { width: qrboxSize, height: qrboxSize };
         },
         aspectRatio: 1.0,
-       facingMode: { exact: "environment" },
+       defaultCamera: "environment",
         rememberLastUsedCamera: false
     },
     false
