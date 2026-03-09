@@ -152,24 +152,22 @@
             .catch(err => log("Scan error:", err));
         }
 
-        const scanner = new Html5QrcodeScanner(
+       const scanner = new Html5QrcodeScanner(
     "reader",
     {
         fps: 10,
         qrbox: function(viewfinderWidth, viewfinderHeight) {
-    let minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-    let qrboxSize = Math.floor(minEdge * 0.75);
-    return { width: qrboxSize, height: qrboxSize };
-}, // better for barcodes
+            let minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+            let qrboxSize = Math.floor(minEdge * 0.75);
+            return { width: qrboxSize, height: qrboxSize };
+        },
         aspectRatio: 1.0,
-        facingMode: "environment", // 🔥 FORCE BACK CAMERA
-        rememberLastUsedCamera: false,
-        supportedScanTypes: [
-            Html5QrcodeScanType.SCAN_TYPE_CAMERA
-        ]
+        facingMode: "environment",
+        rememberLastUsedCamera: false
     },
     false
 );
+
 scanner.render(onScanSuccess);
 
     /* ---------- BILL GENERATION ---------- */
