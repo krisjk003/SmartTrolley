@@ -11,9 +11,15 @@ app.use(express.static(path.join(__dirname, "../front end")));
 
 // 🔥 Barcode based products
 const products = {
-    "8901234567890": { name: "Milk", price: 40, gst: 5 },
+    "8901234567890": { name: "Milk", price: 26, gst: 5 },
     "8901111111111": { name: "Bread", price: 60, gst: 5 },
-    "8902222222222": { name: "Chips", price: 80, gst: 12 }
+    "8902222222222": { name: "Chips", price: 80, gst: 12 },
+    
+    "8903333333333": { name: "Chocolate", price: 120, gst: 12 },
+    "8904444444444": { name: "Rice 1kg", price: 70, gst: 5 },
+    "8905555555555": { name: "Biscuits", price: 30, gst: 12 },
+    "8906666666666": { name: "Cold Drink", price: 50, gst: 18 },
+    "8907777777777": { name: "Instant Noodles", price: 40, gst: 12 }
 };
 
 let liveCart = [];
